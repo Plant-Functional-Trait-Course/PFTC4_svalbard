@@ -11,7 +11,7 @@ library(tarchetypes)
 #install.packages("remotes")
 #remotes::install_github("Plant-Functional-Trait-Course/PFTCFunctions")
 tar_option_set(
-  packages = c("dataDownloader", "tidyverse", "lubridate", "readxl"), # packages that your targets need to run
+  packages = c("dataDownloader", "tidyverse", "lubridate", "readxl", "dataDocumentation", "writexl"), # packages that your targets need to run
   # Set other options as needed.
 )
 #"googlesheets4"
@@ -33,5 +33,6 @@ combined_plan <- c(
   climate_plan,
   community_plan,
   trait_plan,
-  soil_plan
+  soil_plan,
+  data_dic_plan
 )
