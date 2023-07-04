@@ -158,6 +158,13 @@ community_plan <- list(
   tar_target(
     name = height_itex_clean,
     command = clean_height_itex(height_itex_raw)
+  ),
+
+  tar_target(
+    name = height_itex_output,
+    command =  save_csv(height_itex_clean,
+                        name = "PFTC4_Svalbard_2003_2015_ITEX_Community_Structure.csv"),
+    format = "file"
   )
 
 )
