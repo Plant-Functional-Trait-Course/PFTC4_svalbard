@@ -131,6 +131,8 @@ clean_height_itex <- function(height_itex_raw){
            PlotID = str_replace(PlotID, "BIS", "SB"),
            PlotID = str_replace(PlotID, "CAS", "CH"),
            PlotID = str_replace(PlotID, "DRY", "DH")) %>%
+    # remove wrong plotID (unsure which it is)
+    tidylog::filter(!(Treatment == "OTC" & PlotID == "DH-8")) |>
     # flag iced Cassiope plots
     mutate(Flag = if_else(PlotID %in% c("CH-4", "CH-6", "CH-9", "CH-10"), "Iced", NA_character_))
 
