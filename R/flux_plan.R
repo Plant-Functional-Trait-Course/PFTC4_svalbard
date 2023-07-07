@@ -50,5 +50,3 @@ flux_plan <- list(
 
 
 )
-
-load("ITEX_all.Rdata", verbose = TRUE)
