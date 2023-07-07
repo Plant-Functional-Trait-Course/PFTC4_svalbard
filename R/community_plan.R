@@ -165,6 +165,32 @@ community_plan <- list(
     command =  save_csv(height_itex_clean,
                         name = "PFTC4_Svalbard_2003_2015_ITEX_Community_Structure.csv"),
     format = "file"
+  ),
+
+  ### Species list
+  # download
+  tar_target(
+    name = tnrs_download,
+    command =  get_file(node = "smbqh",
+                        file = "TNRS_result.csv",
+                        path = "raw_data",
+                        remote_path = "RawData/RawData_Community"),
+    format = "file"
+  ),
+
+  tar_target(
+    name = tnrs,
+    command =  read_csv(tnrs_download)
+  ),
+
+  tar_target(
+    name = species_list,
+    command =  make_sp_list(tnrs, sp_raw, community_itex_clean, traits_itex_clean, community_gradient_clean, traits_gradient_clean)
+  ),
+
+  tar_target(
+    name = species_list_out,
+    command =  write_csv(species_list, "clean_data/PFTC4_Svalbard_2018_Species_list.csv")
   )
 
 )
