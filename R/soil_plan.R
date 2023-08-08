@@ -32,7 +32,7 @@ soil_plan <- list(
       pivot_longer(cols = c(C, N), names_to = "Variable", values_to = "Value") |>
       # add unit
       mutate(Unit = "percentage") |>
-      select(Gradient:PlotID, Variable, Value, Unit, Weigth_mg = `vekt   mg`, Elevation_m:Latitude_N)
+      select(Gradient:PlotID, Variable, Value, Unit, Weight_mg = `vekt   mg`, Elevation_m:Latitude_N)
   ),
 
   tar_target(
