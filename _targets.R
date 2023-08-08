@@ -11,7 +11,7 @@ library(tarchetypes)
 #install.packages("remotes")
 #remotes::install_github("Plant-Functional-Trait-Course/PFTCFunctions")
 tar_option_set(
-  packages = c("dataDownloader", "tidyverse", "lubridate", "readxl", "dataDocumentation", "writexl"), # packages that your targets need to run
+  packages = c("dataDownloader", "tidyverse", "lubridate", "readxl", "dataDocumentation", "writexl", "vegan", "ggvegan", "patchwork") # packages that your targets need to run
   # Set other options as needed.
 )
 #"googlesheets4"
