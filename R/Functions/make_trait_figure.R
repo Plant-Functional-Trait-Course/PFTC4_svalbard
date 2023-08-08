@@ -56,10 +56,10 @@ make_trait_figure <- function(traits_itex_clean, traits_gradient_clean){
     geom_density(alpha = 0.5) +
     scale_fill_manual(name = "",
                       values = c("green4", "grey50"),
-                      labels = c("Nutrient", "Reference")) +
+                      labels = c("Nutrient input", "Reference")) +
     scale_colour_manual(name = "",
                         values = c("green4", "grey50"),
-                        labels = c("Nutrient", "Reference")) +
+                        labels = c("Nutrient input", "Reference")) +
     labs(x = "Trait values", y = "Density", tag = "b)") +
     facet_wrap(~trait_fancy, scales = "free") +
     theme_minimal() +

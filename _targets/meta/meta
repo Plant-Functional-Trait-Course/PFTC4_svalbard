@@ -70,13 +70,13 @@ leaf_traits_clean|stem|70c228e3fa11f2e4|635c7d63773b3387|55da483cac8f2821|-17585
 load_endalen|function|d04358535fd67abe|||||||||||||||
 load_iButton|function|907cb93beaf9203d|||||||||||||||
 load_tinytag|function|0dc7b716644c19b4|||||||||||||||
-make_ordination|function|aaa5f50ac741c746|||||||||||||||
+make_ordination|function|b809d5106fd740a3|||||||||||||||
 make_sp_list|function|38fd83cac0b44817|||||||||||||||
-make_trait_figure|function|e3fc6a796495fadc|||||||||||||||
+make_trait_figure|function|9c4195fe2420fb09|||||||||||||||
 meta_plan|object|afd2aba78d4d04a7|||||||||||||||
 metaItex|stem|5c26fc0b8f270396|5d49964e1911299c|ecff5e4a69edbc34|1700355398||t19514.5281925098s|31332efc7bb99c56|441|rds|local|vector|||0.404||
 metaItex_download|stem|ffeb75597232c4f6|911935d2352b6bdf|d84f79e1f6ae5e91|914240800|clean_data/PFTC4_Svalbard_2018_metaItex.csv|t19514.370680076s|4234d4d3d176dfdc|445|file|local|vector|||1.756||
-ordination|stem|cc7bf9af99aa590c|eea2d6e761a2982e|46b99c72839d73a9|-2141927564||t19574.2398987571s|cc75e6f2f45b57d1|902751|rds|local|vector|||10.45|1m22mIgnoring unknown parameters linewith|
+ordination|stem|2b5f06a575d267a2|eea2d6e761a2982e|9ddd4948d90ab695|-2141927564||t19577.5284194484s|ea28d37142618e40|905732|rds|local|vector|||8.226|1m22mIgnoring unknown parameters linewith|
 p_download|stem|bbe6c2fb9bec359d|46a8495cdee545df|d84f79e1f6ae5e91|571638657|raw_data/PFTC_All_Phosphor.csv|t19514.5395585133s|85dbc3493f910e60|217298|file|local|vector|||2.77||
 p_raw|stem|5e13286b39c8ef3e|3ea67d8a5a5f80d5|605fac8b00de7888|-616189887||t19514.5428289496s|585f6003a784131d|30084|rds|local|vector|||0.266||
 read_xl_csv|function|0ce8c0d82ca4ef7a|||||||||||||||
@@ -113,7 +113,7 @@ trait_plan|object|1b5756da43ce7892|||||||||||||||
 traits_all|stem|71a882079ee7009e|c49c1b592a545bc4|c5f15424488d9949|-662404675||t19544.7965131547s|76fb09f59b959f5f|135671|rds|local|vector|||0.189||
 traits_clean|stem|70c228e3fa11f2e4|635c7d63773b3387|494d241fe2930311|-1029054740||t19514.5681102166s|06121437c4090f8e|87494|rds|local|vector|||0.772|NAs introduced by coercion.  1 failed to parse.|
 traits_download|stem|7ef38e31d66328e0|0dda4034f1cf3fb3|d84f79e1f6ae5e91|-2000569092|raw_data/PFTC4_Svalbard_2018_LeafTrait_with_DM.csv|t19514.5623295401s|e96a47536e390fe2|164518|file|local|vector|||5.457||
-traits_figure|stem|988686ebe1f9f2d3|0468292ee053a627|4a8f50d09206aea9|-1723706762||t19577.374630203s|5546e0062b318604|593341|rds|local|vector|||0.194|NaNs produced. NaNs produced|
+traits_figure|stem|706bbce1962dccb7|0468292ee053a627|1e8430f005e11902|-1723706762||t19577.5202811889s|d875f77399304d5d|593349|rds|local|vector|||0.136|NaNs produced. NaNs produced|
 traits_final|stem|486e5a1d17f1699c|c22f2d33ee8be00b|3209a9d1f1ddbeda|1466942884||t19514.5685571466s|05301eaf8ef7badc|135645|rds|local|vector|||0.151||
 traits_gradient|stem|e887b14a2054d9ce|52b4e8995803a983|61d52ce2d8ecd777|221928028||t19514.5738632373s|7738ea7672b0880e|92367|rds|local|vector|||0.012||
 traits_gradient_clean|stem|36826194f75981ea|81560ffc6387d84e|153efdd07a408c90|-963879404||t19544.7965172218s|2a8dd70c8006a6c8|92389|rds|local|vector|||0.024||

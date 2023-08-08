@@ -191,6 +191,11 @@ community_plan <- list(
   tar_target(
     name = species_list_out,
     command =  write_csv(species_list, "clean_data/PFTC4_Svalbard_2018_Species_list.csv")
+  ),
+
+  tar_target(
+    name = ordination,
+    command =  make_ordination(community_itex_clean, community_gradient_clean)
   )
 
 )
