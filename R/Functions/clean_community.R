@@ -16,6 +16,13 @@ clean_comm_gradient <- function(community_gradient_raw, draba_dic_raw, coords){
     left_join(draba_dic_raw, by = c("Gradient", "Site", "PlotID")) %>%
     mutate(Taxon = if_else(Taxon %in% c("Draba nivalis", "Draba oxycarpa", "Draba sp1", "Draba sp2"), Draba, Taxon),
            Taxon = if_else(Taxon == "No Drabas", "Unknown sp", Taxon)) %>%
+    # fix other species (TNRS corrections)
+    mutate(Taxon = case_when(Taxon == "Micranthes hieracifolia" ~ "Micranthes hieraciifolia",
+                             Taxon == "Cochleria groenlandica" ~ "Cochlearia groenlandica",
+                             Taxon == "Calamagrostis neglecta" ~ "Calamagrostis stricta",
+                             Taxon == "Huperzia arctica" ~ "Huperzia appressa",
+                             Taxon == "Alopecurus ovatus" ~ "Alopecurus magellanicus",
+                             TRUE ~ Taxon)) |>
     # Fix Cover column
     separate(Cover, into = c("Cover", "Fertile"), sep = "_") %>%
     mutate(Cover = str_replace_all(Cover, " ", ""),
@@ -86,6 +93,8 @@ clean_comm_itex <- function(community_itex_raw, sp_itex, coords_itex){
            Taxon = ifelse(Taxon == "ptilidium ciliare ciliare", "ptilidium ciliare", Taxon),
            Taxon = ifelse(Taxon == "moss unidentified sp", "unidentified moss sp", Taxon),
            Taxon = ifelse(Taxon == "pleurocarp moss unidentified sp", "unidentified pleurocarp moss sp", Taxon),
+           Taxon = ifelse(Taxon == "alopecurus ovatus", "alopecurus magellanicus", Taxon),
+           Taxon = ifelse(Taxon == "luzula arctica", "luzula nivalis", Taxon),
            Taxon = ifelse(Taxon == "polytrichum/polytrichastrum sp", "polytrichum_polytrichastrum sp", Taxon),
 
            FunctionalGroup = if_else(Taxon == "ochrolechia frigida", "fungi", FunctionalGroup),
@@ -115,7 +124,7 @@ clean_height_itex <- function(height_itex_raw){
   height_itex_raw |>
     rename(Site = SUBSITE, Treatment = TREATMENT, PlotID = PLOT, Year = YEAR) |>
     group_by(Site, Treatment, PlotID, Year) |>
-    summarise(height = mean(HEIGHT, na.rm = TRUE)) |>
+    summarise(Height = mean(HEIGHT, na.rm = TRUE)) |>
     mutate(Site2 = substr(Site, 5, 5),
            Site = substr(Site, 1, 3),
            PlotID = gsub("L", "", PlotID)) |>
@@ -123,7 +132,7 @@ clean_height_itex <- function(height_itex_raw){
     filter(Site2 == "L") %>%
     select(-Site2) |>
     # method for which method was used (2015 100 measurements pinpoint method, 2009 highest individuals per plot)
-    mutate(method = if_else(Year == 2015, "pinpoint", "highest_ind")) |>
+    mutate(Method = if_else(Year == 2015, "pinpoint", "highest_ind")) |>
     # rename site and plot names
     mutate(Site = case_when(Site == "BIS" ~ "SB",
                             Site == "CAS" ~ "CH",
