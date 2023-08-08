@@ -1,29 +1,32 @@
 ---
 title: "Data records"
 format: html
-editor: visual
 execute: 
   echo: false
-  message: true
 ---
 
 ```{r}
-#|label: set-up
+#| label: set-up
+#| message: false
 
 library(targets)
 library(tarchetypes)
 library(tidyverse)
+library(lubridate)
 library(vegan)
+library(patchwork)
 library(nlme)
 library(broom.mixed)
-library(patchwork)
+library(gt)
 
 tar_load(community_itex_clean)
 tar_load(community_gradient_clean)
+tar_load(ordination)
 tar_load(height_itex_clean)
 tar_load(comm_structure_gradient_clean)
 tar_load(traits_itex_clean)
 tar_load(traits_gradient_clean)
+tar_load(traits_figure)
 tar_load(soil_gradient_clean)
 tar_load(climate_gradient_clean)
 tar_load(coords)
@@ -31,8 +34,18 @@ tar_load(temperature_itex_clean)
 tar_load(climate_itex_clean)
 ```
 
+This document (almost) replicates the *Data Record* section in the paper Vandvik and Halbritter et al. 2023, Plant traits and associated data from experimental warming, a bird-cliff, and an elevation gradient in Svalbard. Scientific Data. 
+
+This paper reports on data from an ITEX warming experiment and two elevation gradients, with and without bird-cliff influence, in high Arctic vegetation near Longyearbyen, Svalbard. It contains data on plant community composition, vegetation structure, plant functional traits, soil C and N, ecosystem CO~2~ fluxes, remote sensing and climate data collected between 2003 and 2018. Data outputs consist of eight datasets, the (i) species composition, (ii) vegetation height and structure, (iii) plant functional traits, (iv) soil carbon and nitrogen, (v) ecosystem CO2 fluxes, (vi) remote sensing data and (vii) climate data sampled from the ITEX warming experiment and along the gradients (Table 1). Remote sensing data exists from some additional sites (see description for "dataset vii" under Methods) and others. These data were checked and cleaned according to the procedures described under Methods and Technical validation before final data files and associated metadata were produced.
+
+The final data files (see Table 1 for an overview) and all raw data, including leaf scans, are available at Open Science Framework (OSF). For each data type, we provide separate files for the ITEX warming experiment and the gradients (Table 1). The code necessary to access the raw data and produce these cleaned datasets is available in an open GitHub repository, with a versioned copy archived in Zenodo. The reader is referred to the code and the detailed coding, data cleaning, and data accuracy comments and the associated raw and cleaned data and metadata tables for detailed information about the data cleaning process. The Usage Notes section in this paper summarizes the data accuracy and data cleaning procedures, including caveats regarding data quality and our advice on 'best practice' data usage.
+
+### Dataset (i) Plant community composition
+
 ```{r}
-#|label: itex-comm
+#| label: itex-comm
+#| message: false
+#| warning: false
 
 diversity <- community_itex_clean |> 
   group_by(Year, Site, Treatment, PlotID) |> 
@@ -55,22 +68,19 @@ rich <- diversity |>
             se = sd(value)/(sqrt(n()))) |> 
   arrange(Treatment)
 
-rich |> 
+diff <- rich |> 
   select(-se) |> 
   pivot_wider(names_from = Treatment, values_from = mean) |> 
   mutate(diff = CTL - OTC)
 
-
 ```
 
-## Data Records
-
-### Plant community composition (dataset i)
-
-The plot-level plant community dataset from the ITEX warming experiment has a total of `r community_itex_clean |> distinct(Taxon) |> count()` taxa and `r nrow(community_itex_clean)` observations (taxa x plots x years) (Table 1, Table 2). Overall mean species richness per plot, treatment and year (mean ± SE) is `r total$mean[3]` ± `r total$se[3]` species, including vascular plants, bryophytes and lichens. The species richness was `r rich$mean[3]` ± `r rich$se[3]` in the snowbed (SB), to `r rich$mean[1]` ± `r rich$se[1]` in the *Cassiope* heath and `r rich$mean[2]` ± `r rich$se[2]` in the *Dryas* heath (DH). Shannon diversity and evenness show the same pattern. The warming treatment had a very small effect on the community composition... For more details see().
+The plot-level plant community dataset from the ITEX warming experiment has a total of `r community_itex_clean |> distinct(Taxon) |> count()` taxa and `r nrow(community_itex_clean)` observations (taxa x plots x years) (Table 1, Table 2). Overall mean species richness per plot, treatment and year (mean ± SE) is `r round(total$mean[3], 2)` ± `r round(total$se[3], 2)` species, including vascular plants, bryophytes and lichens. The species richness increases from `r round(rich$mean[3], 2)` ± `r round(rich$se[3], 2)` in the snowbed (SB), via `r round(rich$mean[1], 2)` ± `r round(rich$se[1] , 2)` in the Cassiope heath to `r round(rich$mean[2], 2)` ± `r round(rich$se[2], 2)` in the *Dryas* heath (DH). For more details on diversity and community responses, see.
 
 ```{r}
-#|label: gradient-comm
+#| label: gradient-comm
+#| message: false
+#| warning: false
 
 diversity_grad <- community_gradient_clean |>
   group_by(Gradient, Site, PlotID) |>
@@ -95,28 +105,48 @@ rich_grad <- diversity_grad |>
 
 ```
 
-The plot-level plant community dataset from the gradients has a total of `r community_gradient_clean |> distinct(Taxon) |> count()` taxa and `r nrow(community_gradient_clean)` observations (taxa x plots x years) (Table 1, Table 3). 
-Mean species richness (including graminoids, forbs and bryophytes) per plot is `r rich_grad$mean[2]` ± `r rich_grad$se[2]` species for the reference gradient and `r rich_grad$mean[1]` ± `r rich_grad$se[1]` for the nutrient gradient.
-Shannon diversity and evenness were also slightly higher at the reference gradient.
-For more details see bird cliff paper.
+The plot-level plant community dataset from the gradients has a total of `r community_gradient_clean |> distinct(Taxon) |> count()` taxa and `r nrow(community_gradient_clean)` observations (taxa x plots x years) (Table 1, Table 3). Mean species richness (including graminoids, forbs and bryophytes) per plot is `r rich_grad$mean[2]` ± `r round(rich_grad$se[2], 2)` species for the reference gradient and `r rich_grad$mean[1]` ± `r round(rich_grad$se[1], 2)` for the nutrient gradient. Shannon diversity and evenness were also slightly higher at the reference gradient.
 
-## Vegetation height and structure (dataset ii)
+```{r}
+#| label: fig-ordination
+#| messages: false
+#| warnings: false
+#| fig-width: 15
+#| fig-cap: Non-metric Multidimensional Scaling (NMDS) ordination depicting variation in taxonomic composition of vascular and nonvascular plants in the 96 vegetation plots from the Endalen ITEX site (three habitats, Cassiope, Dryas, Snowbed) and two elevation gradients (bird-cliff, control). a) Shown are NMDS axes 1 and 2, based on 74 taxa (listed in appendix). Shapes and colors indicate the habitats and sites within the two study systems. Snowbed (blue squares), Cassiope heath (pink circle), and Dryas heath (red diamond) from the ITEX warming experiment. Bird-cliff (green triangles) and reference (gray triangles) gradient. b) Arrows showing species scores. 
+
+ordination +
+  theme(text = element_text(size = 12))
+```
+
+
+An Non-metric Multidimensional Scaling (NMDS) ordination diagram of all vegetation plots shows gradual variation in species composition within and across our two study systems (Fig. 2a). The ITEX warming experiment is found on the left-hand side of the diagram, characterized by *Dryas octopetala*, *Equisetum* spp., *Bistorta vivipara*, and a number of bryophytes (Fig. 2b). The Dryas and Cassiope heath overlap in community composition whereas the snowbed habitat is the most distinct among the ITEX istes, but is more similar to the elevation gradients. Within all habitats, the warmed plots (open symbols) are generally further to the upper left in the diagram than the respective controls (filled plots). The two elevation gradients overlap in NMDS space and hence in community composition, and grade from low-elevation plots in the center of the ordination diagram towards higher-elevation plots at the lower right-hand side, characterised by high-elevation species such as *Luzula* spp. and *Salix polaris*. The highest-elevation plots from the bird-cliff gradient, which are most affected by nutrients from the birds, are relatively distinct and form a cluster at the upper far right side of the diagram, characterized by a number of nutrient-demanding species such as *Oxyria digyna*, *Cerastium arcticum*, *Draba* spp. and *Saxifraga* spp. For an overview over the clean datasets and links to the code to clean and extract these data from the raw data, see Table 1. The final clean data is provided in the *Community* folder, a species list over species and experiments is provided in the same folder, and the raw data is provided in the *RawData* folder on [OSF](https://paperpile.com/c/aD1CmU/2uv3). The code to download and clean the data can be found in the [GitHub repository](https://paperpile.com/c/aD1CmU/u0pe) in the file R/community_plan.R.
+
+## Dataset (ii) Vegetation height and structure
 
 ```{r}
 #|label: itex-height
 
 # test difference between treatment
-height_itex_clean |> 
+res_height <- height_itex_clean |> 
   group_by(Year, Site) |> 
-  nest(data = -c(Year, Site)) |> 
-  mutate(model = map(data, ~lme(height ~ Treatment, random = ~1|PlotID, data = .x)),
+  nest(data = -c(Year)) |> 
+  mutate(model = map(data, ~lme(Height ~ Site*Treatment, random = ~1|PlotID, data = .x)),
          result = map(model, tidy)) %>%
   unnest(result) |> 
-  filter(effect == "fixed")
+  filter(effect == "fixed") |> 
+  select(Year, term:p.value)
+
+res_height |> 
+  gt() |> 
+    fmt_number(
+  columns = c(estimate, std.error, statistic),
+  decimals = 2) |> 
+    fmt_number(
+  columns = p.value,
+  decimals = 3)
 ```
 
-Vegetation height and structure data from the ITEX warming experiment has a total of `r nrow(height_itex_clean)` observations (site x treatment x plot; Table 1, Table 4). 
-Vegetation did not differ between the control and warming treatment.
+Vegetation height and structure data from the ITEX warming experiment has a total of `r nrow(height_itex_clean)` observations (site x treatment x plot; Table 1, Table 4). Vegetation did not differ between the control and warming treatment. Vegetation height did not differ between the control and warming treatment or among habitats, except in 2009, where height was lower in the Dryas heath (E = -2.18 ± 0.651, t~5,24~ = -3.35, *P* = 0.003).
 
 ```{r}
 #|label: gradient-height
@@ -127,9 +157,9 @@ height_grad <- comm_structure_gradient_clean |>
   summarise(mean = mean(Value),
             se = sd(Value/sqrt(n())))
 
-comm_structure_gradient_clean |> 
+res_height_grad <- comm_structure_gradient_clean |> 
   mutate(Gradient = factor(Gradient, levels = c("C", "B"))) |> 
-  filter(Variable %in% c("Vascular", "MedianHeight_cm")) |> 
+  filter(Variable %in% c("Vascular", "MedianHeight_cm", "Bryophytes", "Litter")) |> 
   group_by(Variable) |> 
   nest(data = -c(Variable)) |> 
   mutate(model = map(data, ~lme(Value ~ Gradient * Elevation_m, random = ~1|PlotID, data = .x)),
@@ -137,92 +167,59 @@ comm_structure_gradient_clean |>
   unnest(result) |> 
   filter(effect == "fixed") |> 
   select(-data, -model, -effect, -group)
+res_height_grad |> 
+  gt() |> 
+    fmt_number(
+  columns = c(estimate, std.error, statistic),
+  decimals = 2) |> 
+    fmt_number(
+  columns = p.value,
+  decimals = 3)
 
 ```
 
-Vegetation height and structure data from the gradient has a total of `r round(nrow(comm_structure_gradient_clean), 2)` observations (gradient x site x plot x variable; Table 1, Table 5). 
-Vegetation height increased with elevation at the bird cliff (E = 0.01 ± 0.004, t^1,80^ = 2.56, *P* = 0.013), but not at the reference site. 
-The vascular plant cover decreased with elevation (E = -0.06 ± 0.026, t^1,80^ = -2.14, *P* = 0.035), but did not differ between the two gradients.
+Vegetation height and structure data from the gradient has a total of `r nrow(comm_structure_gradient_clean)` observations (gradient x site x plot x variable; Table 1, Table 5). Vegetation height increased with increasing elevation at the bird-cliff (E = 0.01 ± 0.004, t~1,71~ = 2.56, *P* = 0.013), but not at the reference site. The vascular plant cover decreased with elevation (E = -0.06 ± 0.026, t~1,71~ = -2.14, *P* = 0.035), but did not differ between the two gradients. Bryophyte cover increased with elevation, but more so at the bird-cliff (E = 0.24 ± 0.08, t~1,71~ = 3.02, *P* = 0.010). Litter cover did not vary with elevation or between the gradients. 
 
+For an overview over the clean datasets and links to the code to clean and extract these data from the raw data, see Table 1. The final clean data is provided in the “Community” folder, and the raw data is provided in the *RawData* folder on OSF. The code to download and clean the data can be found in the GitHub repository in the file R/community_plan.R. 
 
+## Dataset (iii) Plant functional traits
 
-## Plant functional traits (dataset iii)
+In the ITEX warming experiment, we measured physical, structural, chemical and nutrient traits (plant height, wet mass, dry mass, leaf area, leaf thickness, specific leaf area \[SLA\], and leaf dry matter content \[LDMC\], Carbon \[C\], Nitrogen \[N\], Phosphorus, C:N and NP ratios, and isotope \[d13C, d15N\]) for `r traits_itex_clean |> distinct(ID) |> count()` leaf samples from `r traits_itex_clean |> distinct(Taxon) |> count()` taxa across all sites and treatments, for a total of `r nrow(traits_itex_clean)` trait observations (site x treatment x plot; Table 1, Table 6). We also sampled three leaves of the only individual of Betula nana on Svalbard, growing close to the site. There are similar numbers of leaves per site (DH = `r nrow(traits_itex_clean |> filter(Site == "DH"))`; CH = `r nrow(traits_itex_clean |> filter(Site == "CH"))`; SB = `r nrow(traits_itex_clean |> filter(Site == "SB"))`) and treatment (CTL = `r nrow(traits_itex_clean |> filter(Treatment == "CTL"))`; OTC = `r nrow(traits_itex_clean |> filter(Treatment == "OTC"))`).
 
-In the ITEX warming experiment, we measured physical, structural, chemical and nutrient traits (plant height, wet mass, dry mass, leaf area, leaf thickness, specific leaf area [SLA], and leaf dry matter content [LDMC], Carbon [C], Nitrogen [N], Phosphorus, C:N and NP ratios, and isotope [d13C, d15N]) for `r traits_itex_clean |> distinct(ID) |> count()` leaf samples from `r traits_itex_clean |> distinct(Taxon) |> count()` taxa across all sites and treatments, for a total of `r nrow(traits_itex_clean)` trait observations (site x treatment x plot; Table 1, Table 6). 
-There are similar numbers of leaves per site (DH=1894; CH=1737; CB=1666) and treatment (CTL=2691; OTC=2606).
-
-Along the gradients, we measured physical, structural, chemical and nutrient traits (plant height, wet mass, dry mass, leaf area, leaf thickness, shoot length, shoot ratio, specific leaf area [SLA], and leaf dry matter content [LDMC], water holding capacity [WHC], specific shoot length [SSL], Carbon [C], Nitrogen [N], Phosphorus, C:N and NP ratios, and isotope [d13C, d15N]) for `r traits_gradient_clean |> distinct(ID) |> count()` leaf samples from `r traits_gradient_clean |> distinct(Taxon) |> count()` taxa across all sites and treatments, for a total of `r nrow(traits_gradient_clean)` trait observations (site x treatment x plot; Table 1, Table 7).
-Of those were `r traits_gradient_clean |> filter(Functional_group == "bryophyte") |> nrow()` observations and `r traits_gradient_clean |> filter(Functional_group == "bryophyte") |> distinct(Taxon) |> count()` taxa from bryophytes.
-The number of leaves for the two gradients differed (reference = 7061, bird cliff = 4284).
+Unweighted trait distributions show that *size-related traits* such as height, mass, and area tend to increase towards habitats with more snow cover (Fig. 3a). Leaves from snowbeds have a higher percentage of carbon and dN^15^ and lower nitrogen compared to leaves from the drier Dryas heath. Leaves from the Cassiope heath have intermediate values. None of the other unweighted trait distributions show clear trends. For more detailed analyses and interpretation of the trait responses.
 
 ```{r}
 #| label: fig-traits
-#| fig-height: 10
-#| fig-cap: Trait distributions from six sites in Svalbard. Distributions of trait data (unweighted values) based on all sampled leaves (itex warming experiment and gradients) in Svalbard. The size traits (height, mass, length, area and thickness) are log transformed.
+#| warnings: false
+#| fig-height: 12
+#| fig-cap: Trait distributions from (a) an ITEX warming experiment in Endalen  and (b) two elevational gradients with and without bird-cliff influence in Bjørndalen and on Lindholmhøgda near Longyearbyen, in Svalbard. Distributions of trait data (unweighted values) are given for three habitat types (Dryas heath, Cassiope Heath, Snowbed) within the ITEX experiment and for two elevational gradients, a bird-cliff and a reference gradient along the elevational gradients. The plots are based on all sampled leaves in Svalbard, using local trait values for each plot when available. The size traits (height, mass, length, area and thickness) are log-transformed. Note that 4 values at the elevational gradients where NP ratio was > 100 were removed for plotting the figure.
 
-traits <- traits_itex_clean |> 
-  # remove Betula nana leaves
-  filter(!is.na(Site)) |> 
-  mutate(location = case_when(Site == "DH" ~ "Dryas heath",
-                              Site == "CH" ~ "Cassiope heath",
-                              Site == "SB" ~ "Snowbed")) |> 
-  bind_rows(traits_gradient_clean |> 
-  mutate(location = if_else(Gradient == "C", "Reference", "Bird cliff"))) |> 
-  #log transform size and area traits
-      mutate(
-        Value = if_else(
-          Trait %in% c(
-            "Plant_Height_cm",
-            "Wet_Mass_g",
-            "Dry_Mass_g",
-            "Leaf_Area_cm2",
-            "Leaf_Thickness_mm",
-            "Shoot_Length_cm",
-            "Shoot_Length_Green_cm"
-          ),
-          true = suppressWarnings(log(Value)),# suppress warnings from log(-value) in isotopes (these are calculated but not kept)
-          false = Value
-        )) |>
-      # order traits
-      mutate(Trait = factor(Trait, levels = c("Plant_Height_cm", "Dry_Mass_g", "Wet_Mass_g","Leaf_Area_cm2", "Leaf_Thickness_mm", "Shoot_Length_cm", "Shoot_Length_Green_cm", "Shoot_ratio", "SLA_cm2_g", "LDMC", "WHC_g_g", "SSL_cm_g", "C_percent", "N_percent", "CN_ratio", "P_percent", "NP_ratio", "dC13_permil", "dN15_permil")),
-             location == factor(location, levels = c("Reference", "Bird cliff", "Dryas heath", "Cassiope heath", "Snowbed")))
-  
-vasc <- traits |> 
-  filter(Functional_group == "vascular") |> 
-  ggplot(aes(x = Value, fill = location)) +
-  geom_density(alpha = 0.7) +
-  scale_fill_viridis_d(option = "magma", begin = 0.2) +
-  labs(x = "", tag = "a)") +
-  facet_wrap(~Trait, scales = "free") +
-  theme_bw()
-
-bryo <- traits |> 
-  filter(Functional_group == "bryophyte") |> 
-  ggplot(aes(x = Value, fill = location)) +
-  geom_density(alpha = 0.7) +
-  scale_fill_viridis_d(option = "magma", begin = 0.2, end = 0.7) +
-  labs(x = "", tag = "b)") +
-  facet_wrap(~Trait, scales = "free") +
-  theme_bw()
-
-vasc / bryo + plot_layout(guides = "collect")
+traits_figure
 
 ```
 
+Along the gradients, we measured physical, structural, chemical and nutrient traits (plant height, wet mass, dry mass, leaf area, leaf thickness, shoot length, shoot ratio, specific leaf area \[SLA\], and leaf dry matter content \[LDMC\], water holding capacity \[WHC\], specific shoot length \[SSL\], Carbon \[C\], Nitrogen \[N\], Phosphorus, C:N and NP ratios, and isotope \[d13C, d15N\]) for `r traits_gradient_clean |> distinct(ID) |> count()` leaf samples from `r traits_gradient_clean |> distinct(Taxon) |> count()` taxa across all sites and treatments, for a total of `r nrow(traits_gradient_clean)` trait observations (site x treatment x plot; Table 1, Table 7). Of those were `r traits_gradient_clean |> filter(Functional_group == "bryophyte") |> nrow()` observations and `r traits_gradient_clean |> filter(Functional_group == "bryophyte") |> distinct(Taxon) |> count()` taxa from bryophytes. The number of leaves for the two gradients differed (reference = `r traits_gradient_clean |> filter(Gradient == "C") |> nrow()`, bird cliff = `r traits_gradient_clean |> filter(Gradient == "B") |> nrow()`).
 
-Unweighted trait distributions of all trait data per site are provided in Fig. X. 
-The trait data covered between 57% and 85% of the cumulative covers of the species in the plant community, based on the sum of covers from the control plots (calculations based on datasets i).
-The leaf traits show consistent trends with elevation.
-The “size-related traits” such as height, mass and area tend to decrease towards higher elevations (Fig. 4).
-LDMC shows a decreasing trend, indicating more stress-tolerant leaves at higher elevations. SLA does not show a clear trend with elevation.
+Visual inspection of the unweighted trait distributions indicate that plants influenced by nutrients from a seabird colony are taller and have larger leaves, higher SLA and leaves with lower carbon and higher N and dN^15^ content compared to the reference gradient (Fig. 3b).
 
+The trait datasets from both the ITEX warming experiment and the gradients are suitable for exploring community weighted trait distributions since we have measurements for species making up at least 80% of the cumulative cover for all traits in all plots (calculations based on datasets i). In the warming experiment 96.1% and at the gradient 73.4% of the plots meet this criterion for local (plot-level) trait measurements which makes the data well-suited to study community-level consequences of intraspecific trait variation. Note that values are lower for chemical traits, for which we have plot-level measurements for 77% in the warming experiment and 26% in the gradients.  
 
-### Soil C and N
+For an overview over the clean datasets and links to the code to clean and extract these data from the raw data, see Table 1. The final clean data is provided in the *Traits* folder, and the raw data is provided in the *RawData* folder on OSF. The code to download and clean the data can be found in the GitHub repository in the file R/trait_plan.R. 
+
+### Dataset (iv) Soil carbon and nitrogen
 
 ```{r}
+#| label: soil_cn
+#| message: false
+
 n <- soil_gradient_clean |> 
   group_by(Gradient, Variable) |> 
   summarise(n = n())
+
+soil_means <- soil_gradient_clean |> 
+  group_by(Gradient, Variable) |> 
+  summarise(mean = round(mean(Value), 1),
+            se = round(sd(Value/sqrt(n())), 2))
   
 model <- soil_gradient_clean |>
   mutate(Gradient = factor(Gradient, levels = c("C", "B"))) |> 
@@ -233,38 +230,83 @@ model <- soil_gradient_clean |>
   unnest(result) |> 
   filter(effect == "fixed") |> 
   select(-data, -model, -effect, -group)
+
 ```
 
-Vegetation height and structure data from the gradient has a total of `r nrow(soil_gradient_clean)` observations (gradient x site x plot x variable; Table 1, Table 8).
-There are 21 observations for C and N each at the reference gradient and 14 each at the bird cliff.
-Carbon and nitrogen content did not vary between the gradients or with elevation.
+The soil carbon and nitrogen dataset from the gradients have `r nrow(soil_gradient_clean)` observations (gradient x site x plot x variable; Table 1, Table 8). There are `r soil_gradient_clean |> filter(Variable == "C", Gradient == "C") |> nrow()` observations for C and N, each at the reference gradient and `r soil_gradient_clean |> filter(Variable == "C", Gradient == "B") |> nrow()` each at the bird-cliff. Carbon and nitrogen content did not vary between the gradients or with elevation. 
 
-For an overview over the clean datasets and links to the code to clean and extract these data from the raw data, see Table 1. The final clean data is provided in the "Soil" folder, and the raw data is provided in the "RawData" folder on OSF(ref). The code to download and clean the data can be found in the GitHub repository(ref) in the file R/soil_plan.R.
+The average soil carbon content at the bird-cliff site was `r soil_means$mean[1]` ± `r soil_means$se[1]` % and nitrogen content `r soil_means$mean[2]` ± `r soil_means$se[2]` %. At the reference gradient, soil carbon content `r soil_means$mean[3]` ± `r soil_means$se[3]` % and nitrogen content `r soil_means$mean[4]` ± `r soil_means$se[4]` % were lower than the bird-cliff. 
+
+For an overview over the clean datasets and links to the code to clean and extract these data from the raw data, see Table 1. The final clean data is provided in the *Soil* folder, and the raw data is provided in the *RawData* folder on OSF. The code to download and clean the data can be found in the GitHub repository in the file R/soil_plan.R. 
+
+### Dataset (v) Ecosystem CO~2~ flux 
+
+The ecosystem CO~2~ flux dataset (NEE, Reco and GPP) from the ITEX warming experiment has 135 individual flux measurements from peak growing season in 2018, paired with their environmental metadata (site x plot x variable; Table 1, Table 9). Fluxes are generally larger in the dry Dryas heath than the wet snowbed community, with the Cassiope heath being intermediate. Across the three sites, experimental warming increases Reco and GPP fluxes, yielding similar NEE across treatments5. 
+
+For an overview over the clean datasets and links to the code to clean and extract these data from the raw data, see Table 1. The raw CO~2~ flux data from both the ITEX warming and gradients is provided as zip files in the *RawData/RawData_C-Flux* folder onOSF. The CO~2~ flux data from the ITEX warming experiment is provided on OSF as non-standardized raw data *C-Flux/Cflux_SV_ITEX_2018.csv* and as standardized data *C-Flux/Endalen_paper/ITEX_all.Rdata*. For the code to clean and standardize the ITEX flux data see Jónsdóttir et al. 5. We do not provide a clean version of the gradient flux data. 
 
 
-### Climate
+### Dataset (vi) Remote sensing
+
+In total, we created 5-band orthomosaics, radiometrically calibrated and georeferenced with GCPs, from seven areas, covering 118 ha, built using 28,500 overlapping geolocated images, and with pixel resolutions that range from 2.90 cm to 6.72 cm. We further collected 68 turfs from two sites (ITEX warming experiment and Bird-cliff elevational gradient) that we used for ground-truthing, and from which we obtained leaf spectroscopy readings and functional traits. These turfs represented 18 species of moss, graminoids, and dwarf shrubs, and generated a total of 340 leaf spectroscopy measurements (spectra). Finally, an additional 117 ground-truthing points were geolocated in the three core sites identified as dwarf shrub, graminoid, or moss (Table 9). 
+
+The data are organized in six main categories, namely: i) Handheld spectra, which contains all the hyperspectral data from the turfs; ii) UAV imagery, which contains the multispectral orthomosaics for each of the sites that were flown; iii) turf species; iv) turf traits; v) UAV spectra, which contains the multi-spectral information extracted from the orthomosaics for the points where the turfs and ground-truthed species coordinates were taken - read for further information. A sixth category corresponds to Sentinel imagery used to upscale the maps produced in28. A readme text file has been produced for each of these data categories, explaining the metadata in detail. 
+
+All The remote sensing data can be found on the OSF repository.  
+
+### Dataset (viii) Climate
 
 ```{r}
-climate_itex_clean |> 
+#| label: climate
+#| message: false
+climate_means <- climate_itex_clean |> 
   group_by(Variable) |> 
   summarise(mean = round(mean(Value), 2),
             se = round(sd(Value)/sqrt(n()), 2))
 ```
 
-Climate data from the ITEX warming experiment has a total of `r nrow(climate_itex_clean)` observations including temperature, PAR, relative humidity, water content, and solar radiation data throughout 2015 - 2018 (date x variable; Table 1, Table X). 
+Climate data from the ITEX warming experiment has a total of `r nrow(climate_itex_clean)` observations, including temperature, PAR, relative humidity, water content, and solar radiation data throughout 2015 - 2018 (date x variable; Table 1, Table 10). Average values over the whole period were `r climate_means$mean[1]` ± `r climate_means$se[1]` μmol m−2 s−1, PAR, `r climate_means$mean[2]` ± `r climate_means$se[2]` % relative humidity, `r climate_means$mean[3]` ± `r climate_means$se[3]` W/m² solar radiation, `r climate_means$mean[4]` ± `r climate_means$se[4]` °C and `r climate_means$mean[5]` ± `r climate_means$se[5]` m³/m³ water content. For more details. 
+
 
 ```{r}
+#| label: temperature_itex
+#| message: false
+
 temperature_itex_clean |> 
   group_by(LoggerType, LoggerLocation) |> 
   summarise(mean = round(mean(Value), 2),
             se = round(sd(Value)/sqrt(n()), 2))
+c <- temperature_itex_clean |>
+  mutate(year = year(DateTime),
+         month = month(DateTime)) %>%
+  filter(month %in% c(6, 7, 8, 9),
+         Treatment == "CTL") %>%
+  group_by(Variable, LoggerLocation) %>%
+  summarise(n = n(),
+            mean = mean(Value, na.rm = TRUE),
+            se = sd(Value, na.rm = TRUE)/sqrt(n()))
+
+temperature_itex_clean |>
+  mutate(year = year(DateTime),
+         month = month(DateTime)) %>%
+  filter(month %in% c(6, 7, 8, 9),
+         year != 2014) %>%
+  group_by(Variable, Treatment, Site, LoggerLocation) %>%
+  summarise(mean = mean(Value, na.rm = TRUE)) %>%
+  pivot_wider(names_from = Treatment, values_from = mean) %>%
+  mutate(Diff = OTC - CTL) |>
+  mutate(Diff = round(Diff, 2)) |> 
+  arrange(LoggerLocation, Site)
 ```
 
-Temperature data from the ITEX warming experiment has a total of `r nrow(temperature_itex_clean)` observations from 2004 - 2005 and 2015 - 2018 (date x site x treatment x logger; Table 1, Table Y). 
 
+Temperature data from the ITEX warming experiment has a total of `r nrow(temperature_itex_clean)` observations from 2004 - 2005 and 2015 - 2018 (date x site x treatment x logger; Table 1, Table 11).  
 
+The mean summer surface temperature (June - September) in the periods between 2004 and 2005 and 2014-2018 was 7.7 ± 0.01 °C and the soil temperature was 5.37 ± 0.01 (dataset vi - 1, Table 8). The OTCs increase the summer surface temperature between 0.62 - 1.67 °C and soil temperature by 0.49 - 1.03 °C, except for the Cassiope heath where the temperature was -0.70 °C colder in the OTC compared to the control plots in this period. 
 
 ```{r}
+#| label: climate_gradient
+#| message: false
 
 model <- climate_gradient_clean |>
   left_join(coords |> 
@@ -277,10 +319,20 @@ model <- climate_gradient_clean |>
          result = map(model, tidy)) %>%
   unnest(result) |> 
   filter(effect == "fixed") |> 
-  select(-data, -model, -effect, -group) |> filter(p.value < 0.05)
+  select(-data, -model, -effect, -group)
+
+model |> 
+  gt() |> 
+  fmt_number(
+  columns = c(estimate, std.error, statistic),
+  decimals = 2) |> 
+    fmt_number(
+  columns = p.value,
+  decimals = 3)
 ```
 
-Climate data from the gradient has a total of `r nrow(climate_gradient_clean)` observations (n = 81 for soil moisture and temperature each; gradient x site x plot x variable; Table 1, Table Z).
-Soil temperature was higher at the reference gradient (E = 2.68, t71 = 6.11, P < 0.001). Soil moisture decreased with elevation but more strongly at the bird (E = -0.10, t71 = -3.42, P = 0.001).
+Soil temperature was higher at the reference gradient (E = 2.68, t71 = 6.11, P \< 0.001). Soil moisture decreased with elevation but more strongly at the bird (E = -0.10, t71 = -3.42, P = 0.001).
 
-For an overview over the clean datasets and links to the code to clean and extract these data from the raw data, see Table 1. The final clean data is provided in the "Climate" folder, and the raw data is provided in the "RawData" folder on OSF(ref). The code to download and clean the data can be found in the GitHub repository(ref) in the file R/climate_plan.R.
+Climate data from the gradient has a total of `r nrow(climate_gradient_clean)` observations (n = 81 for soil moisture and temperature each; gradient x site x plot x variable; Table 1, Table 12). Soil temperature was higher at the reference gradient (E = 2.68, t71 = 6.11, P < 0.001). Soil moisture decreased with elevation but more strongly at the bird (E = -0.10, t71 = -3.42, P = 0.001). 
+
+For an overview over the clean datasets and links to the code to clean and extract these data from the raw data, see Table 1. The final clean data is provided in the *Climate* folder, and the raw data is provided in the *RawData* folder on OSF. The code to download and clean the data can be found in the GitHub repository in the file R/climate_plan.R.
