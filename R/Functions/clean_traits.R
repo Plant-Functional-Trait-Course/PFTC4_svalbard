@@ -327,21 +327,20 @@ clean_traits <- function(traits_raw, leaf_area_raw, metaItex, coords){
            SSL_cm_g = Length_Moss_cm / Dry_Mass_g) %>%
 
     # Flags and filter unrealistic trait values
-    mutate(Dry_Mass_g = ifelse(Functional_group == "vascular" & SLA_cm2_g > 500, NA_real_, Dry_Mass_g),
-           Wet_Mass_g = ifelse(Functional_group == "vascular" & SLA_cm2_g > 500, NA_real_, Wet_Mass_g),
-           Leaf_Area_cm2 = ifelse(Functional_group == "vascular" & SLA_cm2_g > 500, NA_real_, Leaf_Area_cm2),
-           Dry_Mass_Total_g = ifelse(Functional_group == "vascular" & SLA_cm2_g > 500, NA_real_, Dry_Mass_Total_g),
+    tidylog::mutate(Dry_Mass_g = ifelse(Functional_group == "vascular" & SLA_cm2_g > 500, NA_real_, Dry_Mass_g)) |>
+    tidylog::mutate(Wet_Mass_g = ifelse(Functional_group == "vascular" & SLA_cm2_g > 500, NA_real_, Wet_Mass_g)) |>
+    tidylog::mutate(Leaf_Area_cm2 = ifelse(Functional_group == "vascular" & SLA_cm2_g > 500, NA_real_, Leaf_Area_cm2)) |>
+    mutate(Dry_Mass_Total_g = ifelse(Functional_group == "vascular" & SLA_cm2_g > 500, NA_real_, Dry_Mass_Total_g),
            Wet_Mass_Total_g = ifelse(Functional_group == "vascular" & SLA_cm2_g > 500, NA_real_, Wet_Mass_Total_g),
            Leaf_Area_Total_cm2 = ifelse(Functional_group == "vascular" & SLA_cm2_g > 500, NA_real_, Leaf_Area_Total_cm2),
-           Flag = ifelse(Functional_group == "vascular" & SLA_cm2_g > 500, "SLA_>_500", NA_character_),
-           SLA_cm2_g = ifelse(Functional_group == "vascular" & SLA_cm2_g > 500, NA_real_, SLA_cm2_g),
-
-           Dry_Mass_g = ifelse(Functional_group == "vascular" & LDMC > 1, NA_real_, Dry_Mass_g),
-           Wet_Mass_g = ifelse(Functional_group == "vascular" & LDMC > 1, NA_real_, Wet_Mass_g),
-           Dry_Mass_Total_g = ifelse(Functional_group == "vascular" & LDMC > 1, NA_real_, Dry_Mass_Total_g),
-           Wet_Mass_Total_g = ifelse(Functional_group == "vascular" & LDMC > 1, NA_real_, Wet_Mass_Total_g),
-           Flag = ifelse(Functional_group == "vascular" & LDMC > 1, "LDMC_>_1", NA_character_),
-           LDMC = ifelse(Functional_group == "vascular" & LDMC > 1, NA_real_, LDMC)) %>%
+           Flag = ifelse(Functional_group == "vascular" & SLA_cm2_g > 500, "SLA_>_500", NA_character_)) |>
+    tidylog::mutate(SLA_cm2_g = ifelse(Functional_group == "vascular" & SLA_cm2_g > 500, NA_real_, SLA_cm2_g)) |>
+    tidylog::mutate(Dry_Mass_g = ifelse(Functional_group == "vascular" & LDMC > 1, NA_real_, Dry_Mass_g)) |>
+    tidylog::mutate(Wet_Mass_g = ifelse(Functional_group == "vascular" & LDMC > 1, NA_real_, Wet_Mass_g)) |>
+    tidylog::mutate(Dry_Mass_Total_g = ifelse(Functional_group == "vascular" & LDMC > 1, NA_real_, Dry_Mass_Total_g)) |>
+    tidylog::mutate(Wet_Mass_Total_g = ifelse(Functional_group == "vascular" & LDMC > 1, NA_real_, Wet_Mass_Total_g)) |>
+    mutate(Flag = ifelse(Functional_group == "vascular" & LDMC > 1, "LDMC_>_1", NA_character_)) |>
+    tidylog::mutate(LDMC = ifelse(Functional_group == "vascular" & LDMC > 1, NA_real_, LDMC)) %>%
     mutate(Flag = if_else(ID == "CCP4302", "Area cut a tiny bit", NA_character_)) %>%
     mutate(Flag = if_else(ID %in% c("ADM0955", "AMD6577", "AME5937", "AMF5763", "AMH0895", "AOE8815", "AOT9797", "ASF0636", "ASF0636", "BLS7300", "BUR2769", "BUZ1775"), "Thickness_measure_wrong_remeasured_dry_leaf_might_be_too_small_value", NA_character_)) %>%
     # Make data speak to other PFTC data
@@ -480,6 +479,11 @@ finalize_traits <- function(traits_clean, chem_traits_clean){
                                Project == "Sean" ~ "Leaf physiology"),
            # change taxon to sp, because uncertain
            Taxon = if_else(Taxon == "sanionia uncinata", "sanionia sp", Taxon),
+           # TNRS corrections
+           Taxon = case_when(Taxon == "micranthes hieracifolia" ~ "micranthes hieraciifolia",
+                             Taxon == "calamagrostis neglecta" ~ "calamagrostis stricta",
+                             Taxon == "alopecurus ovatus" ~ "alopecurus magellanicus",
+                             TRUE ~ Taxon),
 
            Gradient = case_when(Gradient == "B" ~ "B",
                                 Gradient == "C" ~ "C",

@@ -76,8 +76,8 @@ trait_plan <- list(
         full_join(p_clean, by = c("ID", "Country")) %>%
         select(ID, Country, C_percent:dC13_permil, P_percent, Remark_CN, filename, Flag_corrected) %>%
         # filter unrealistic values
-        mutate(P_percent = if_else(P_percent > 5, NA_real_, P_percent),
-               C_percent = if_else(C_percent > 60, NA_real_, C_percent),
+        tidylog::mutate(P_percent = if_else(P_percent > 5, NA_real_, P_percent)) |>
+        tidylog::mutate(C_percent = if_else(C_percent > 60, NA_real_, C_percent),
                C_percent = if_else(C_percent < 20, NA_real_, C_percent)) %>%
         mutate(Country = "SV",
                NP_ratio = N_percent / P_percent) %>%
@@ -160,5 +160,11 @@ trait_plan <- list(
     command = save_csv(traits_saxy_clean,
                        name = "PFTC4_Svalbard_2018_Polyploidy_Traits.csv"),
     format = "file"
+  ),
+
+  tar_target(
+    name = traits_figure,
+    command = make_trait_figure(traits_itex_clean, traits_gradient_clean)
   )
+
 )
