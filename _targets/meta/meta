@@ -1,5 +1,5 @@
 name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
-.Random.seed|object|ad0fa57ad858f3e7|||||||||||||||
+.Random.seed|object|c8cc05febd0fcc75|||||||||||||||
 all_codes|stem|1f5ca3de73aa7e0d|4ffabf54ab0ba268|b465d252ba33dc07|1909839369||t19514.5428250644s|e0224cf10db1a05d|62|rds|local|vector|||0.039||
 all_codes_raw|stem|8c31467da3cf268b|52ff273850e90fc4|ef46db3751d8e999|768765806|raw_data/envelope_codes.Rdata|t17667.6459722222s|a60c253392e12c6d|176069|file|local|vector|||1.138||
 attribute_grad|stem|ce6235c708a38073|605e4ed9edc09206|04f1d6eeab76f44d|-1707034841||t19580.3658098889s|6e8194c9f755176e|1353|rds|local|vector|||0.339||
@@ -9,8 +9,8 @@ attribute_itex_file|stem|8a65e4a9d829845a|7b9f0c93d074c764|ef46db3751d8e999|1300
 cflux_gradient_raw|stem|565833cb25ceb041|186df863af9e9f1d|033f7dd8a0fa82a8|529402323||t19543.2922317073s|780233f066ee39df|6021|rds|local|vector|||0.19||
 chem_traits_clean|stem|7f3a5ea378f6d6e7|313a672aa9a0db19|9e190443b45eeb77|1107318093||t19577.5124723931s|cf949846714ada65|48228|rds|local|vector|||4.354||
 clean_cn_traits|function|048f48116b0431eb|||||||||||||||
-clean_comm_gradient|function|8ab8194ae846c9c8|||||||||||||||
-clean_comm_itex|function|10ba232e7cd6a25b|||||||||||||||
+clean_comm_gradient|function|eb9b01994fb33932|||||||||||||||
+clean_comm_itex|function|53ba9eac061a23d9|||||||||||||||
 clean_comm_structure_grad|function|1a58513cbce7d091|||||||||||||||
 clean_gradient_flux|function|a6c90d4ad7065b4e|||||||||||||||
 clean_height_itex|function|00c819e2afb0a9ea|||||||||||||||
@@ -29,17 +29,17 @@ climate_plan|object|ff7030dcefb93b0c|||||||||||||||
 climate_plan2|object|4d234d65be84902b|||||||||||||||
 cn_download|stem|8b1895070849e08d|a62a1c61eaa11e44|c857792075ef24df|-1806614041|raw_data/IsotopeData/XLSX files/Enquist_19NORWAY-4)_219-REPORT.xlsx*raw_data/IsotopeData/XLSX files/Enquist(18NORWAY-2)_N18b-REPORT.xlsx*raw_data/IsotopeData/XLSX files/Enquist(18NORWAY-1)_N18-REPORT.xlsx*raw_data/IsotopeData/XLSX files/Enquist(20NORWAY-13).620-REPORT.xlsx*raw_data/IsotopeData/XLSX files/Enquist_18NORWAY-3_119-REPORT.xlsx*raw_data/IsotopeData/Enquist(19NORWAY-6).519-REPORT.xlsx*raw_data/IsotopeData/Enquist_19NORWAY-4)_219-REPORT.xlsx*raw_data/IsotopeData/Enquist(18NORWAY-2)_N18b-REPORT.xlsx*raw_data/IsotopeData/Enquist_18NORWAY-3_119-REPORT.xlsx*raw_data/IsotopeData/Enquist(18NORWAY-1)_N18-REPORT.xlsx*raw_data/IsotopeData/Enquist(19NORWAY-5).419-REPORT.xlsx*raw_data/IsotopeData/Enquist(NORWAY-11).120-REPORT.xlsx*raw_data/IsotopeData/Enquist(20NORWAY-13).620-REPORT.xlsx*raw_data/IsotopeData/Enquist(19NORWAY-10).D19d-REPORT.xlsx*raw_data/IsotopeData/Enquist(19NORWAY-8).D19-REPORT.xlsx*raw_data/IsotopeData/Enquist(19NORWAY-9).220-REPORT.xlsx*raw_data/IsotopeData/Enquist(20NORWAY-12).220b-REPORT.xlsx*raw_data/IsotopeData/Enquist(19NORWAY-7).O19-REPORT.xlsx|t19514.546650646s|972435f04a684e91|1290628|file|local|vector|||5.587||
 combined_plan|object|43ccb4c9a13a4747|||||||||||||||
-comm_grad_dic|stem|388d365af1c88105|7e2755ff8a73d430|1221eb41f1b6dc54|-1615086982||t19580.3658298051s|e3fe1faf80820e02|762|rds|local|vector|||0.045||
-comm_itex_dic|stem|46c6a3e405baea62|36aa090f4170e548|6861f71d0e946353|-1062816664||t19580.3658611783s|3b09dd57974b6e48|809|rds|local|vector|||0.043||
+comm_grad_dic|stem|388d365af1c88105|7e2755ff8a73d430|ab849a1a6dbfbe76|-1615086982||t19580.4801645375s|e3fe1faf80820e02|762|rds|local|vector|||0.131||
+comm_itex_dic|stem|46c6a3e405baea62|36aa090f4170e548|21e68c4d8d0beb77|-1062816664||t19580.4801712782s|3b09dd57974b6e48|809|rds|local|vector|||0.091||
 comm_structure_gradient_clean|stem|cfd3eb1f11d2bd62|ab2418a7d338ce3c|4b12aca0177a321e|628348216||t19523.5943802559s|4ef8af798c68913e|3638|rds|local|vector|||0.068||
 comm_structure_gradient_output|stem|5d8db0d16d00e639|8a2a4883cdca25fd|4f9a15fa1e6df67a|1484306552|clean_data/PFTC4_Svalbard_2018_Community_Structure_Gradient.csv|t19523.5943840814s|70100d5b24973561|67126|file|local|vector|||0.143||
-community_gradient_clean|stem|7d2097103fa41a79|7a729ef59f75367e|9f281d3a2629ed11|479390226||t19544.7916399948s|e79514268f2b45e5|4910|rds|local|vector|||0.32||
+community_gradient_clean|stem|7fce66db63522111|7a729ef59f75367e|77447ac096932c34|479390226||t19580.4801583083s|5084cec2b145c81b|4919|rds|local|vector|||0.312|1m22mDetected an unexpected manytomany relationship between x and y.36mℹ39m Row 179 of x matches multiple rows in y.36mℹ39m Row 1 of y matches multiple rows in x.36mℹ39m If a manytomany relationship is expected, set relationship   manytomany to silence this warning.|
 community_gradient_download|stem|8e0f52431aa68627|436dd736948d2f67|d84f79e1f6ae5e91|356517899|raw_data/PFTC4_Svalbard_2018_Community.csv|t19514.3962022804s|53d6de8d4e6055c3|15106|file|local|vector|||2.206||
-community_gradient_output|stem|8eb9c66e7a78523b|04d45e20c05c0e5f|5254e3fe32b56cd0|-2045951560|clean_data/PFTC4_Svalbard_2018_Community_Gradient.csv|t19544.7916578273s|3ff9beba94c1d7f0|72206|file|local|vector|||0.51||
+community_gradient_output|stem|f039cdede4d6dfd0|04d45e20c05c0e5f|717e7b80a39b66f4|-2045951560|clean_data/PFTC4_Svalbard_2018_Community_Gradient.csv|t19580.4801698754s|a937d2c9394590c9|72325|file|local|vector|||0.446||
 community_gradient_raw|stem|5bcca5106e00e08a|82fa3de83abb5cc0|b972b063c8f8af30|-1214916368||t19514.5104919159s|0058cbb44cdefd44|5522|rds|local|vector|||0.252||
-community_itex_clean|stem|05ebcb682c4f22a7|22099c2089d830ed|d0f29e937b5060e7|-477081350||t19544.791648591s|3f635e2c5c6c82f0|5427|rds|local|vector|||0.466||
+community_itex_clean|stem|d1c540d2e29fdc1a|22099c2089d830ed|0a4e0e8e4043eaa5|-477081350||t19580.4801617423s|134ee55ded14a165|5432|rds|local|vector|||0.235||
 community_itex_download|stem|d7cad9fe6adbfa71|30fd8aecf2c75040|d84f79e1f6ae5e91|1096582362|raw_data/ENDALEN_ALL-YEARS_TraitTrain.xlsx|t19514.3962395054s|64d18429de10cfd8|2132863|file|local|vector|||2.208||
-community_itex_output|stem|901092254da01f41|dc774d6d3b5b93fd|06f65fa4c27881e6|1442119607|clean_data/PFTC4_Svalbard_2003_2015_ITEX_Community.csv|t19544.7916696478s|e2d4ea1d607766c0|79889|file|local|vector|||0.305||
+community_itex_output|stem|3ce7640fe91fd786|dc774d6d3b5b93fd|201c88827ae97c15|1442119607|clean_data/PFTC4_Svalbard_2003_2015_ITEX_Community.csv|t19580.4801731153s|16abdc0977e15a58|80022|file|local|vector|||0.125||
 community_itex_raw|stem|eb99fc6948396f10|f7c0a90b8049a998|41dc278e44632600|-1632379704||t19514.5104879287s|86603afee67c501a|4941|rds|local|vector|||0.057||
 community_plan|object|4fff04ee3f752678|||||||||||||||
 coordinate_itex_download|stem|28921b3c2505604c|d3b5148c8431ca50|d84f79e1f6ae5e91|1916069975|clean_data/PFTC4_Svalbard_Coordinates_ITEX.xlsx|t19514.4495311064s|f93c4052a59a87b5|9462|file|local|vector|||3.22||
@@ -71,15 +71,15 @@ leaf_traits_clean|stem|70c228e3fa11f2e4|635c7d63773b3387|55da483cac8f2821|-17585
 load_endalen|function|d04358535fd67abe|||||||||||||||
 load_iButton|function|907cb93beaf9203d|||||||||||||||
 load_tinytag|function|0dc7b716644c19b4|||||||||||||||
-make_ordination|function|41bba1e5ba024163|||||||||||||||
+make_ordination|function|96623e896c942d2a|||||||||||||||
 make_sp_list|function|38fd83cac0b44817|||||||||||||||
 make_trait_figure|function|9c4195fe2420fb09|||||||||||||||
-manuscript|stem|6c121fe8701e63ec|f199e760553eec1b|8153fc8dc11d3ef1|615889701|data_records_files*data_records.html*data_records.qmd|t19580.3883870507s|0bf6b4d8fed94afa|1798419|file|local|vector|||20.522||
+manuscript|stem|6287139592a1dd75|f199e760553eec1b|1d6a2e6f092d9084|615889701|data_records_files*data_records.html*data_records.qmd|t19580.4807470464s|e756a86abf86de22|247801|file|local|vector|||31.86||
 manuscript_plan|object|1392aaf2c66a6fdf|||||||||||||||
 meta_plan|object|afd2aba78d4d04a7|||||||||||||||
 metaItex|stem|5c26fc0b8f270396|5d49964e1911299c|ecff5e4a69edbc34|1700355398||t19514.5281925098s|31332efc7bb99c56|441|rds|local|vector|||0.404||
 metaItex_download|stem|ffeb75597232c4f6|911935d2352b6bdf|d84f79e1f6ae5e91|914240800|clean_data/PFTC4_Svalbard_2018_metaItex.csv|t19514.370680076s|4234d4d3d176dfdc|445|file|local|vector|||1.756||
-ordination|stem|f2feb792d5dbca4c|eea2d6e761a2982e|872a4edbd3e2d3a0|-2141927564||t19580.3669628462s|1b6caeb1eeb2ea91|902828|rds|local|vector|||7.654||
+ordination|stem|e998177b2440157a|eea2d6e761a2982e|b24e9c305cecc265|-2141927564||t19580.4803249268s|b221a7e258bd2946|902838|rds|local|vector|||12.868||
 p_download|stem|bbe6c2fb9bec359d|46a8495cdee545df|d84f79e1f6ae5e91|571638657|raw_data/PFTC_All_Phosphor.csv|t19514.5395585133s|85dbc3493f910e60|217298|file|local|vector|||2.77||
 p_raw|stem|5e13286b39c8ef3e|3ea67d8a5a5f80d5|605fac8b00de7888|-616189887||t19514.5428289496s|585f6003a784131d|30084|rds|local|vector|||0.266||
 read_xl_csv|function|0ce8c0d82ca4ef7a|||||||||||||||
@@ -99,8 +99,8 @@ sp_itex|stem|0b78559db5ba8fc5|4a0f011e4c6a6e10|f447958b23f10d3e|1832122629||t195
 sp_itex_download|stem|56be1da602b650aa|54e6c44bb0e2e727|d84f79e1f6ae5e91|-2095313677|raw_data/Species lists_Iceland_Svalbard.xlsx|t19514.3971785066s|51f66014ebbd9c4a|5621902|file|local|vector|||2.211||
 sp_itex_raw|stem|876866ca540c8598|4fcb41e763fed427|3876c864f59eec5c|153210238||t19514.5104851783s|bdc1b157e6cc1be9|2323|rds|local|vector|||0.032||
 sp_raw|stem|ec54fc9688d28e35|b56e5b293ea0a9bc|fbd94fd7d4307e20|405141509||t19543.2711563572s|889332e94008a476|1545|rds|local|vector|||0.305||
-species_list|stem|5e3e98f0950b69e1|67bccbf25ebce6c4|ef2abf232f943ea4|-512410389||t19545.3891546121s|b8efccd0ddad4fff|2174|rds|local|vector|||0.133||
-species_list_out|stem|5e3e98f0950b69e1|33083fba28cf5230|68c43dd63b39e0ee|-1194359466||t19545.3891548305s|b8efccd0ddad4fff|2174|rds|local|vector|||0.004||
+species_list|stem|9ba36233b8ceb333|67bccbf25ebce6c4|8ce34f3263433643|-512410389||t19580.4803298818s|5fc97845fc7a775b|2186|rds|local|vector|||0.26||
+species_list_out|stem|9ba36233b8ceb333|33083fba28cf5230|5369021dc0004241|-1194359466||t19580.4803305417s|5fc97845fc7a775b|2186|rds|local|vector|||0.008||
 structure_itex_raw|stem|c13ddd14d3943889|1ffd63092e96ab89|41dc278e44632600|1263659843||t19523.5842056056s|0308cd533d1b2aac|2675|rds|local|vector|||0.03||
 SV.data.raw|stem|565833cb25ceb041|285645417d71d79b|7199b9143a2e7ccc|351897214||t19536.8731970342s|780233f066ee39df|6021|rds|local|vector|||0.12||
 SV.data.sr.flux.raw|stem|6d2fddcc29a19000|b137d753ff6ec760|7199b9143a2e7ccc|1488856124||t19536.8731471589s|033117727351ff29|4791|rds|local|vector|||0.363||

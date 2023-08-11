@@ -56,7 +56,8 @@ make_ordination <- function(community_itex_clean, community_gradient_clean){
   fNMDS <- fortify(NMDS) %>%
     filter(Score == "sites") %>%
     bind_cols(comm_fat %>% select(Site:Location)) |>
-    mutate(Elevation_m = if_else(!Location %in% c("C", "B"), 238, Elevation_m))
+    mutate(Elevation_m = if_else(!Location %in% c("C", "B"), 238, Elevation_m),
+           Location = factor(Location, levels = c("B", "C", "DH", "CH", "SB")))
 
   Ordination <- ggplot(fNMDS, aes(x = NMDS1, y = NMDS2, group = PlotID, shape = Treatment, colour = Location, alpha = Elevation_m)) +
     geom_point(size = 2.5) +
@@ -64,8 +65,8 @@ make_ordination <- function(community_itex_clean, community_gradient_clean){
     scale_shape_manual(name = "Treatment",
                        values = c(16, 1)) +
     scale_colour_manual(name = "Habitat",
-                        values = c("green4", "grey50", "pink3", "red","lightblue"),
-                        labels = c("Nutrient input", "Reference", "Cassiope", "Dryas", "Snowbed")) +
+                        values = c("green4", "grey50", "red", "pink3", "lightblue"),
+                        labels = c("Nutrient input", "Reference", "Dryas", "Cassiope", "Snowbed")) +
     scale_alpha_continuous(name = "Elevation m a.s.l.",
                            range = c(0.4, 1)) +
     labs(x = "NMDS axis 1", y = "NMDS axis 2", tag = "a)") +
