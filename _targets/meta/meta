@@ -1,4 +1,5 @@
 name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
+.Random.seed|object|ad0fa57ad858f3e7|||||||||||||||
 all_codes|stem|1f5ca3de73aa7e0d|4ffabf54ab0ba268|b465d252ba33dc07|1909839369||t19514.5428250644s|e0224cf10db1a05d|62|rds|local|vector|||0.039||
 all_codes_raw|stem|8c31467da3cf268b|52ff273850e90fc4|ef46db3751d8e999|768765806|raw_data/envelope_codes.Rdata|t17667.6459722222s|a60c253392e12c6d|176069|file|local|vector|||1.138||
 attribute_grad|stem|ce6235c708a38073|605e4ed9edc09206|04f1d6eeab76f44d|-1707034841||t19580.3658098889s|6e8194c9f755176e|1353|rds|local|vector|||0.339||
@@ -27,7 +28,7 @@ climate_itex_output|stem|6041844f9e9c2f97|3d7822c90ade3c71|22b9c2f4d61de23c|9291
 climate_plan|object|ff7030dcefb93b0c|||||||||||||||
 climate_plan2|object|4d234d65be84902b|||||||||||||||
 cn_download|stem|8b1895070849e08d|a62a1c61eaa11e44|c857792075ef24df|-1806614041|raw_data/IsotopeData/XLSX files/Enquist_19NORWAY-4)_219-REPORT.xlsx*raw_data/IsotopeData/XLSX files/Enquist(18NORWAY-2)_N18b-REPORT.xlsx*raw_data/IsotopeData/XLSX files/Enquist(18NORWAY-1)_N18-REPORT.xlsx*raw_data/IsotopeData/XLSX files/Enquist(20NORWAY-13).620-REPORT.xlsx*raw_data/IsotopeData/XLSX files/Enquist_18NORWAY-3_119-REPORT.xlsx*raw_data/IsotopeData/Enquist(19NORWAY-6).519-REPORT.xlsx*raw_data/IsotopeData/Enquist_19NORWAY-4)_219-REPORT.xlsx*raw_data/IsotopeData/Enquist(18NORWAY-2)_N18b-REPORT.xlsx*raw_data/IsotopeData/Enquist_18NORWAY-3_119-REPORT.xlsx*raw_data/IsotopeData/Enquist(18NORWAY-1)_N18-REPORT.xlsx*raw_data/IsotopeData/Enquist(19NORWAY-5).419-REPORT.xlsx*raw_data/IsotopeData/Enquist(NORWAY-11).120-REPORT.xlsx*raw_data/IsotopeData/Enquist(20NORWAY-13).620-REPORT.xlsx*raw_data/IsotopeData/Enquist(19NORWAY-10).D19d-REPORT.xlsx*raw_data/IsotopeData/Enquist(19NORWAY-8).D19-REPORT.xlsx*raw_data/IsotopeData/Enquist(19NORWAY-9).220-REPORT.xlsx*raw_data/IsotopeData/Enquist(20NORWAY-12).220b-REPORT.xlsx*raw_data/IsotopeData/Enquist(19NORWAY-7).O19-REPORT.xlsx|t19514.546650646s|972435f04a684e91|1290628|file|local|vector|||5.587||
-combined_plan|object|f23d604277ff2882|||||||||||||||
+combined_plan|object|43ccb4c9a13a4747|||||||||||||||
 comm_grad_dic|stem|388d365af1c88105|7e2755ff8a73d430|1221eb41f1b6dc54|-1615086982||t19580.3658298051s|e3fe1faf80820e02|762|rds|local|vector|||0.045||
 comm_itex_dic|stem|46c6a3e405baea62|36aa090f4170e548|6861f71d0e946353|-1062816664||t19580.3658611783s|3b09dd57974b6e48|809|rds|local|vector|||0.043||
 comm_structure_gradient_clean|stem|cfd3eb1f11d2bd62|ab2418a7d338ce3c|4b12aca0177a321e|628348216||t19523.5943802559s|4ef8af798c68913e|3638|rds|local|vector|||0.068||
@@ -73,6 +74,8 @@ load_tinytag|function|0dc7b716644c19b4|||||||||||||||
 make_ordination|function|41bba1e5ba024163|||||||||||||||
 make_sp_list|function|38fd83cac0b44817|||||||||||||||
 make_trait_figure|function|9c4195fe2420fb09|||||||||||||||
+manuscript|stem|6c121fe8701e63ec|f199e760553eec1b|8153fc8dc11d3ef1|615889701|data_records_files*data_records.html*data_records.qmd|t19580.3883870507s|0bf6b4d8fed94afa|1798419|file|local|vector|||20.522||
+manuscript_plan|object|1392aaf2c66a6fdf|||||||||||||||
 meta_plan|object|afd2aba78d4d04a7|||||||||||||||
 metaItex|stem|5c26fc0b8f270396|5d49964e1911299c|ecff5e4a69edbc34|1700355398||t19514.5281925098s|31332efc7bb99c56|441|rds|local|vector|||0.404||
 metaItex_download|stem|ffeb75597232c4f6|911935d2352b6bdf|d84f79e1f6ae5e91|914240800|clean_data/PFTC4_Svalbard_2018_metaItex.csv|t19514.370680076s|4234d4d3d176dfdc|445|file|local|vector|||1.756||

@@ -35,5 +35,6 @@ combined_plan <- c(
   trait_plan,
   soil_plan,
   flux_plan,
-  data_dic_plan
+  data_dic_plan,
+  manuscript_plan
 )
