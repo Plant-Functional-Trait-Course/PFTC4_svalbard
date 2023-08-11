@@ -45,8 +45,13 @@ make_ordination <- function(community_itex_clean, community_gradient_clean){
   species <- envfit(NMDS, comm_fat_spp, permutations = 999)
   spp.scrs <- as.data.frame(scores(species, display = "vectors")) |>
     rownames_to_column(var = "Taxon") |>
-    mutate(pval = species$vectors$pvals) #|>
-    #filter(pval <= 0.05)
+    mutate(pval = species$vectors$pvals) |>
+    filter(pval <= 0.05) |>
+    filter(Taxon != "Unidentified liverwort sp",
+           Taxon != "Aulacomnium turgidum",
+           Taxon != "Campylium stellatum",
+           Taxon != "Peltigera sp",
+           Taxon != "Cetraria islandica")
 
   fNMDS <- fortify(NMDS) %>%
     filter(Score == "sites") %>%
@@ -66,21 +71,20 @@ make_ordination <- function(community_itex_clean, community_gradient_clean){
     labs(x = "NMDS axis 1", y = "NMDS axis 2", tag = "a)") +
     theme_bw()
 
-  arrows <- ggplot(fNMDS, aes(x = NMDS1, y = NMDS2)) +
+  species_plot <- ggplot(fNMDS, aes(x = NMDS1, y = NMDS2)) +
     coord_equal() +
-    geom_segment(data = spp.scrs, aes(x = 0, xend = NMDS1, y = 0, yend = NMDS2),
-                 arrow = arrow(length = unit(0.25, "cm")),
-                 colour = "grey60", linewith = 0.3) +
     ggrepel::geom_text_repel(data = spp.scrs,
                              aes(x = NMDS1, y = NMDS2, label = Taxon),
                              colour = "grey20",
-                             cex = 3, direction = "both", segment.size = 0.25) +
+                             cex = 3, direction = "both",
+                             segment.size = 0.25,
+                             max.overlaps = Inf) +
     labs(x = "NMDS axis 1", y = "NMDS axis 2", tag = "b)")  +
     theme_bw()
 
-  ordination_plot <- Ordination / arrows + plot_layout(guides = "collect") & theme(text = element_text(size = 17))
+  ordination_plot <- Ordination / species_plot + plot_layout(guides = "collect") & theme(text = element_text(size = 17))
 
 }
-#ggsave("Ordination.png", ordination_plot, width = 8, height = 14)
-
+# ggsave("Ordination.png", ordination_plot, dpi = 300, width = 8, height = 12, bg = "white")
+# ggsave("traits_figure.png", trait_figure, dpi = 300, width = 9, height = 12, bg = "white")
 
