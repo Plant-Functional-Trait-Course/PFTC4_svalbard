@@ -22,6 +22,7 @@ clean_comm_gradient <- function(community_gradient_raw, draba_dic_raw, coords){
                              Taxon == "Calamagrostis neglecta" ~ "Calamagrostis stricta",
                              Taxon == "Huperzia arctica" ~ "Huperzia appressa",
                              Taxon == "Alopecurus ovatus" ~ "Alopecurus magellanicus",
+                             Taxon == "Festuca rubra" ~ "Festuca richardsonii",
                              TRUE ~ Taxon)) |>
     # Fix Cover column
     separate(Cover, into = c("Cover", "Fertile"), sep = "_") %>%
@@ -82,7 +83,6 @@ clean_comm_itex <- function(community_itex_raw, sp_itex, coords_itex){
 
            Taxon = paste(Genus, Species, sep = " ")) %>%
     mutate(Taxon = ifelse(Taxon == "NA oppositifolia", "saxifraga oppositifolia", Taxon),
-           Taxon = ifelse(Taxon == "festuca richardsonii", "festuca rubra", Taxon),
            Taxon = ifelse(Taxon == "pedicularis hisuta", "pedicularis hirsuta", Taxon),
            Taxon = ifelse(Taxon == "alopecurus boreale", "alopecurus ovatus", Taxon),
            Taxon = ifelse(Taxon == "stellaria crassipes", "stellaria longipes", Taxon),
