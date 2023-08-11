@@ -76,8 +76,8 @@ trait_plan <- list(
         full_join(p_clean, by = c("ID", "Country")) %>%
         select(ID, Country, C_percent:dC13_permil, P_percent, Remark_CN, filename, Flag_corrected) %>%
         # filter unrealistic values
-        mutate(P_percent = if_else(P_percent > 5, NA_real_, P_percent),
-               C_percent = if_else(C_percent > 60, NA_real_, C_percent),
+        tidylog::mutate(P_percent = if_else(P_percent > 5, NA_real_, P_percent)) |>
+        tidylog::mutate(C_percent = if_else(C_percent > 60, NA_real_, C_percent),
                C_percent = if_else(C_percent < 20, NA_real_, C_percent)) %>%
         mutate(Country = "SV",
                NP_ratio = N_percent / P_percent) %>%
@@ -108,57 +108,63 @@ trait_plan <- list(
 
   # clean traits
   tar_target(
-    name = traits_clean,
+    name = leaf_traits_clean,
     command = clean_traits(traits_raw, leaf_area_raw, metaItex, coords)
   ),
 
   # merge traits and chem traits
   tar_target(
-    name = traits_final,
-    command = finalize_traits(traits_clean, chem_traits_clean)
+    name = traits_all,
+    command = finalize_traits(leaf_traits_clean, chem_traits_clean)
   ),
 
   # gradient traits
   tar_target(
-    name = traits_gradient,
-    command = traits_final %>%
+    name = traits_gradient_clean,
+    command = traits_all %>%
         filter(Project %in% c("Gradient", "Bryophytes")) %>%
         select(-Treatment)
   ),
 
   tar_target(
     name = traits_gradient_output,
-    command = save_csv(traits_gradient,
+    command = save_csv(traits_gradient_clean,
                name = "PFTC4_Svalbard_2018_Gradient_Traits.csv"),
     format = "file"
   ),
 
   # itex traits
   tar_target(
-    name = traits_itex,
-    command = traits_final %>%
+    name = traits_itex_clean,
+    command = traits_all %>%
       filter(Project == "ITEX") %>%
       select(-Gradient)
   ),
 
   tar_target(
     name = traits_itex_output,
-    command = save_csv(traits_itex,
+    command = save_csv(traits_itex_clean,
                        name = "PFTC4_Svalbard_2018_ITEX_Traits.csv"),
     format = "file"
   ),
 
   tar_target(
-    name = traits_saxy,
-    command = traits_final %>%
+    name = traits_saxy_clean,
+    command = traits_all %>%
       filter(Project == "Polyploidy") %>%
       select(-Gradient, -Site, -Treatment)
   ),
 
   tar_target(
     name = traits_saxy_output,
-    command = save_csv(traits_saxy,
+    command = save_csv(traits_saxy_clean,
                        name = "PFTC4_Svalbard_2018_Polyploidy_Traits.csv"),
     format = "file"
+  ),
+
+  tar_target(
+    name = traits_figure,
+    command = make_trait_figure(traits_itex_clean, traits_gradient_clean)
   )
+
 )
