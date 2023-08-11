@@ -102,7 +102,7 @@ The final data files (see (@tbl-overview) for an overview) and all raw data, inc
 #| echo: false
 #| fig-cap: Experimental site and gradients in High Arctic Svalbard. (a) Inset map and aerial photo showing the location of the study area on Svalbard and the location of the seabird nutrient input gradient (bird icon), reference gradient (R), and ITEX warming experiment (I) in relation to Longyearbyen. (b) Schematic illustrating the elevational distribution of sites (marked by their elevation) and nutrient influence (lighter area below the little auk colony) within the reference (R) and nutrient input (bird icon) gradient. (c) Schematic illustrating the relative topographic position of the snowbed (SB), Cassiope heath (CH), and Dryas heath (DH) habitats, each represented by one Open Top Chamber, along a snowmelt gradient deployed within the ITEX site (I), Note that the full ITEX site design includes five OTCs and five control plots (not shown) within each habitat.  
 
-knitr::include_graphics("Svalbard Data Paper Figure 1 Aug-10-23.png")
+knitr::include_graphics("Figure 1.jpg")
 ```
 
 
